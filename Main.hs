@@ -1,10 +1,20 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, GADTs, KindSignatures, FlexibleInstances #-}
 
 module Main where
+
+import Transport
+import TH
 
 import Data.Aeson
 import Data.Aeson.TH
 import Data.Char
+
+import Language.Haskell.TH
+import Language.Haskell.TH.Syntax ( VarStrictType )
+
+data F :: * -> * where
+   F :: Int -> F Int
+   G :: Bool -> F Bool
 
 data D a = Nullary
          | Unary Int
@@ -14,7 +24,7 @@ data D a = Nullary
                   , testThree :: D a
                   } deriving (Eq,Show)
 
-$(deriveJSON defaultOptions{fieldLabelModifier = drop 4, constructorTagModifier = map toLower} ''D)
+$(deriveFromJSONTransport defaultOptions{fieldLabelModifier = id, constructorTagModifier = map toLower} ''F)
 
 
 d :: D Int
