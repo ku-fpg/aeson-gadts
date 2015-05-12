@@ -10,5 +10,5 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Syntax ( VarStrictType )
 
 data Transport :: (* -> *) -> * where
-  Transport :: (ToJSON a) => m a -> Transport m
+  Transport :: (ToJSON a) => f a -> Transport f
 
